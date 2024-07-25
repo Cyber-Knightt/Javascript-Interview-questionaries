@@ -18,7 +18,15 @@
 | 11 | [What is an anonymous function](#What-is-an-anonymous-function) |
 | 12 | [Immediately invoked function execution](#Immediately-invoked-function-execution) |
 | 13 | [JavaScript pass-by-value or pass-by-reference](#JavaScript-pass-by-value-or-pass-by-reference) |
-| 14 | [What is an anonymous function](#What-is-an-anonymous-function) |
+| 14 | [What is Literals](#What-is-Literals) |
+| 15 | [What is a first class function](#what-is-a-first-class-function) |
+| 16 | [What is a first order function](#what-is-a-first-order-function) |
+| 17 | [What is a higher order function](#what-is-a-higher-order-function) |
+| 18 | [What is a unary function](#what-is-a-unary-function) |
+| 19 | [What is the currying function](#what-is-the-currying-function) |
+| 20 | [What is a pure function](#what-is-a-pure-function) |
+| 21 | [What is the Temporal Dead Zone](#what-is-the-temporal-dead-zone) |
+| 22 | [What is memoization](#what-is-memoization) |
 
 <!-- TOC_END -->
 
@@ -420,18 +428,18 @@
 
 11. ### What is an anonymous function?
 	An anonymous function is a function without a name. The following shows how to define an anonymous function:
-
+	```javascript
 	(function () {
 		//...
 	});
-
+	```
 12. ### Immediately invoked function execution?
 	If you want to create a function and execute it immediately after the declaration, you can declare an anonymous function like this:
-
+	```javascript
 	(function() {
 		console.log('IIFE');
 	})();
-
+	```
 	The primary reason to use an IIFE is to obtain data privacy because any variables declared within the IIFE cannot be accessed by the outside world. i.e, If you try to access variables from the IIFE then it throws an error as below,
 	```javascript
 	(function () {
@@ -454,3 +462,239 @@
 	**[⬆ Back to Top](#table-of-contents)**
 
 13. ### JavaScript pass-by-value or pass-by-reference?	
+
+	Pass by Value
+	JavaScript is primarily a “pass by value” language. But what does this mean?
+
+	Pass by value means when a variable is assigned to another variable, the value stored in the variable is copied into the new variable. They are independent of each other, each occupying its own memory space.
+	```javascript
+	let a = 10;
+	let b = a;
+
+	a = 20;
+
+	console.log(a); // Outputs: 20
+	console.log(b); // Outputs: 10
+	```
+
+	-> When a function is called, the value of the variable is directly passed as an argument. Therefore, any modifications made inside the function do not impact the original value.
+	-> The parameters passed as arguments generate their own copies. Consequently, any alterations made inside the function apply to the copied value, not the original value.
+	```javascript
+	function Passbyvalue(a, b) {
+		let tmp;
+		tmp = b;
+		b = a;
+		a = tmp;
+		console.log(`Inside Pass by value function -> a = ${a} b = ${b}`); // Output a =2 b =1
+	}
+
+	let a = 1;
+	let b = 2;
+	console.log(`Before calling Pass by value Function -> a = ${a} b = ${b}`);//Output a = 1 b = 2
+
+	Passbyvalue(a, b);
+
+	console.log(`After calling Pass by value Function -> a =${a} b = ${b}`);// Output a =1 b = 2
+	```
+
+	Pass by Reference
+	While JavaScript is primarily a “pass by value” language, it uses a concept called “pass by reference” when dealing with objects (including arrays and functions).
+
+	When an object is created in JavaScript, it is stored in a memory space, and the variable associated with it stores the memory address or reference where the object is stored.
+
+	If you assign this object variable to another variable, it does not copy the object. Instead, it copies the reference to the object. Both variables now point to the same memory space, which means changes through one variable are reflected when accessing the object through the other variable.
+	```javascript
+	let obj1 = { value: 10 };
+	let obj2 = obj1;
+
+	obj1.value = 20;
+
+	console.log(obj1.value); // Outputs: 20
+	console.log(obj2.value); // Outputs: 20
+	```
+	In JavaScript, all function arguments are always passed by value. It means that JavaScript copies the values of the variables into the function arguments.
+	In Pass by Reference, Function is called by directly passing the reference/address of the variable as an argument. So changing the value inside the function also change the original value. In JavaScript array and Object follows pass by reference property.
+	In Pass by reference, parameters passed as an arguments does not create its own copy, it refers to the original value so changes made inside function affect the original value. 
+
+	```javascript
+	function PassbyReference(obj) {
+		let tmp = obj.a;
+		obj.a = obj.b;
+		obj.b = tmp;
+
+		console.log(`Inside Pass By Reference Function -> a = ${obj.a} b = ${obj.b}`); // Output  a = 20 b = 10
+	}
+
+	let obj = {
+		a: 10,
+		b: 20
+
+	}
+	console.log(`Before calling Pass By Reference Function -> a = ${obj.a} b = ${obj.b}`); // Output  a = 10 b = 20
+
+	PassbyReference(obj)
+
+	console.log(`After calling Pass By Reference Function -> a = ${obj.a} b = ${obj.b}`); // Output  a = 20 b = 10
+	```
+
+14. ### What is Literals?
+
+	Literals represent values in JavaScript. These are fixed values—not variables—that you literally provide in your script.
+	Read More[Literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types#literals)
+
+15. ### What is a first class function
+
+    In Javascript, functions are first class objects. First-class functions means when functions in that language are treated like any other variable.
+
+    For example, in such a language, a function can be passed as an argument to other functions, can be returned by another function and can be assigned as a value to a variable. For example, in the below example, handler functions assigned to a listener
+
+    ```javascript
+    const handler = () => console.log("This is a click handler function");
+    document.addEventListener("click", handler);
+    ```
+
+    **[⬆ Back to Top](#table-of-contents)**
+
+16. ### What is a first order function
+
+    A first-order function is a function that doesn’t accept another function as an argument and doesn’t return a function as its return value.
+
+    ```javascript
+    const firstOrder = () => console.log("I am a first order function!");
+    ```
+
+    **[⬆ Back to Top](#table-of-contents)**
+
+17. ### What is a higher order function
+
+    A higher-order function is a function that accepts another function as an argument or returns a function as a return value or both.
+    The syntactic structure of higher order function will be as follows,
+
+    ```javascript
+    const firstOrderFunc = () =>
+      console.log("Hello, I am a First order function");
+    const higherOrder = (ReturnFirstOrderFunc) => ReturnFirstOrderFunc();
+    higherOrder(firstOrderFunc);
+    ```
+    You can also call the function which you are passing to higher order function as callback function.
+
+    The higher order function is helpful to write the modular and reusable code. 
+
+    **[⬆ Back to Top](#table-of-contents)**
+
+18. ### What is a unary function
+
+    A unary function (i.e. monadic) is a function that accepts exactly one argument. It stands for a single argument accepted by a function.
+
+    Let us take an example of unary function,
+
+    ```javascript
+    const unaryFunction = (a) => console.log(a + 10); // Add 10 to the given argument and display the value
+    ```
+
+    **[⬆ Back to Top](#table-of-contents)**
+
+19. ### What is the currying function
+
+    Currying is the process of taking a function with multiple arguments and turning it into a sequence of functions each with only a single argument. Currying is named after a mathematician **Haskell Curry**. By applying currying, an n-ary function turns into a unary function.
+
+    Let's take an example of n-ary function and how it turns into a currying function,
+
+    ```javascript
+    const multiArgFunction = (a, b, c) => a + b + c;
+    console.log(multiArgFunction(1, 2, 3)); // 6
+
+    const curryUnaryFunction = (a) => (b) => (c) => a + b + c;
+    curryUnaryFunction(1); // returns a function: b => c =>  1 + b + c
+    curryUnaryFunction(1)(2); // returns a function: c => 3 + c
+    curryUnaryFunction(1)(2)(3); // returns the number 6
+    ```
+
+    Curried functions are great to improve **code reusability** and **functional composition**.
+
+	Why Currying?
+		helps avoid passing the same variable again and again
+		helps to create Higher Order Functions
+		fewer errors and side effects
+
+	Currying vs Partial Application 🔥
+	In currying, nested functions are equal to arguments, means each function must have a single argument.
+	f(a, b, c) -> f(a)(b)(c)
+
+	Partial Application transforms a function into another function with smaller arguments (less args).
+	f(a, b, c) -> f(a)(b, c)
+
+	![Screenshot](images/currying-function.png)
+    **[⬆ Back to Top](#table-of-contents)**
+
+20. ### What is a pure function
+
+    A **Pure function** is a function where the return value is only determined by its arguments without any side effects. i.e, If you call a function with the same arguments 'n' number of times and 'n' number of places in the application then it will always return the same value.
+
+    Let's take an example to see the difference between pure and impure functions,
+
+    ```javascript
+    //Impure
+    let numberArray = [];
+    const impureAddNumber = (number) => numberArray.push(number);
+    //Pure
+    const pureAddNumber = (number) => (argNumberArray) =>
+      argNumberArray.concat([number]);
+
+    //Display the results
+    console.log(impureAddNumber(6)); // returns 1
+    console.log(numberArray); // returns [6]
+    console.log(pureAddNumber(7)(numberArray)); // returns [6, 7]
+    console.log(numberArray); // returns [6]
+    ```
+
+    As per the above code snippets, the **Push** function is impure itself by altering the array and returning a push number index independent of the parameter value, whereas **Concat** on the other hand takes the array and concatenates it with the other array producing a whole new array without side effects. Also, the return value is a concatenation of the previous array.
+
+    Remember that Pure functions are important as they simplify unit testing without any side effects and no need for dependency injection. They also avoid tight coupling and make it harder to break your application by not having any side effects. These principles are coming together with the **Immutability** concept of ES6: giving preference to **const** over **let** usage.
+
+    **[⬆ Back to Top](#table-of-contents)**
+
+21. ### What is the Temporal Dead Zone
+
+    The Temporal Dead Zone(TDZ) is a specific period or area of a block where a variable is inaccessible until it has been intialized with a value. This behavior in JavaScript that occurs when declaring a variable with the let and const keywords, but not with var. In ECMAScript 6, accessing a `let` or `const` variable before its declaration (within its scope) causes a ReferenceError. 
+
+    Let's see this behavior with an example,
+
+    ```javascript
+    function somemethod() {
+      console.log(counter1); // undefined
+      console.log(counter2); // ReferenceError
+      var counter1 = 1;
+      let counter2 = 2;
+    }
+    ```
+
+    **[⬆ Back to Top](#table-of-contents)**
+
+22. ### What is memoization
+
+    Memoization is a functional programming technique which attempts to increase a function’s performance by caching its previously computed results. Each time a memoized function is called, its parameters are used to index the cache. If the data is present, then it can be returned, without executing the entire function. Otherwise the function is executed and then the result is added to the cache.
+    Let's take an example of adding function with memoization,
+
+    ```javascript
+    const memoizAddition = () => {
+      let cache = {};
+      return (value) => {
+        if (value in cache) {
+          console.log("Fetching from cache");
+          return cache[value]; // Here, cache.value cannot be used as property name starts with the number which is not a valid JavaScript  identifier. Hence, can only be accessed using the square bracket notation.
+        } else {
+          console.log("Calculating result");
+          let result = value + 20;
+          cache[value] = result;
+          return result;
+        }
+      };
+    };
+    // returned function from memoizAddition
+    const addition = memoizAddition();
+    console.log(addition(20)); //output: 40 calculated
+    console.log(addition(20)); //output: 40 cached
+    ```
+
+    **[⬆ Back to Top](#table-of-contents)**
