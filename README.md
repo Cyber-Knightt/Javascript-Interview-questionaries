@@ -27,7 +27,10 @@
 | 20 | [What is a pure function](#what-is-a-pure-function) |
 | 21 | [What is the Temporal Dead Zone](#what-is-the-temporal-dead-zone) |
 | 22 | [What is memoization](#what-is-memoization) |
+| 23 | [What is an observable](#what-is-an-observable) |
+| 24 | [What are the differences between promises and observables](#what-are-the-differences-between-promises-and-observables) |
 
+| NodeJs | [Node Js Topics](#Nodejs-topics) |
 <!-- TOC_END -->
 
 
@@ -698,3 +701,44 @@
     ```
 
     **[⬆ Back to Top](#table-of-contents)**
+
+23. ### What is an observable
+
+	An Observable is basically a function that can return a stream of values either synchronously or asynchronously to an observer over time. The consumer can get the value by calling `subscribe()` method.
+	Let's look at a simple example of an Observable
+
+	```javascript
+	import { Observable } from "rxjs";
+
+	const observable = new Observable((observer) => {
+	setTimeout(() => {
+		observer.next("Message from a Observable!");
+	}, 3000);
+	});
+
+	observable.subscribe((value) => console.log(value));
+	```
+
+	![Screenshot](images/observables.png)
+
+	**Note:** Observables are not part of the JavaScript language yet but they are being proposed to be added to the language
+
+	Some of the most common use cases of observables are web sockets with push notifications, user input changes, repeating intervals, etc
+
+	**[⬆ Back to Top](#table-of-contents)**
+
+24.	### What are the differences between promises and observables
+
+	Some of the major difference in a tabular form
+
+	| Promises                                                           | Observables                                                                              |
+	| ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
+	| Emits only a single value at a time                                | Emits multiple values over a period of time(stream of values ranging from 0 to multiple) |
+	| Eager in nature; they are going to be called immediately           | Lazy in nature; they require subscription to be invoked                                  |
+	| Promise is always asynchronous even though it resolved immediately | Observable can be either synchronous or asynchronous                                     |
+	| Doesn't provide any operators                                      | Provides operators such as map, forEach, filter, reduce, retry, and retryWhen etc        |
+	| Cannot be canceled                                                 | Canceled by using unsubscribe() method                                                   |
+
+	**[⬆ Back to Top](#table-of-contents)**
+
+	### Nodejs topics
