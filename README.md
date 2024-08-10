@@ -29,8 +29,19 @@
 | 22 | [What is memoization](#what-is-memoization) |
 | 23 | [What is an observable](#what-is-an-observable) |
 | 24 | [What are the differences between promises and observables](#what-are-the-differences-between-promises-and-observables) |
+| 25 | [What is a Constructor](#what-is-a-constructor) |
+| 26 | [What is an Object](#what-is-an-object) |
+| 27 | [What is an Object Prototype](#what-is-an-object-prototype) |
+| 28 | [What is a Prototype Chain and Shadowing properties](#what-is-a-prototype-chain-and-Shadowing-properties) |
+| 29 | [What is a Promise](#what-is-a-promise) |
 
 | NodeJs | [Node Js Topics](#Nodejs-topics) |
+
+| No. | Questions |
+| --- | --------- |
+| 1 | [What are the possible ways to create objects in JavaScript](#what-are-the-possible-ways-to-create-objects-in-javascript) |
+| 2 | [What is a prototype chain](#what-is-a-prototype-chain) |
+| 3 | [What is closures](#what-is-closures) |
 <!-- TOC_END -->
 
 
@@ -436,6 +447,8 @@
 		//...
 	});
 	```
+	**[⬆ Back to Top](#table-of-contents)**
+
 12. ### Immediately invoked function execution?
 	If you want to create a function and execute it immediately after the declaration, you can declare an anonymous function like this:
 	```javascript
@@ -741,4 +754,151 @@
 
 	**[⬆ Back to Top](#table-of-contents)**
 
+25.	### What is a Constructor
+
+	A constructor is a special function that creates and initializes an object instance of a class. In JavaScript, a constructor gets called when an object is created using the new keyword.
+	The purpose of a constructor is to create a new object and set values for any existing object properties.
+
+	When a constructor gets invoked in JavaScript, the following sequence of operations take place:
+
+	A new empty object gets created.
+	The this keyword begins to refer to the new object and it becomes the current instance object.
+	The new object is then returned as the return value of the constructor.
+	```Javascript
+	//Constructor
+	function User() {
+		this.name = 'Bob';
+	}
+
+	var user = new User();
+
+	//Object literal
+	let user = {
+		name: 'Bob'
+	}
+	```
+	**[⬆ Back to Top](#table-of-contents)**
+
+26.	### What is an Object
+
+	An object is a collection of related data and/or functionality. These usually consist of several variables and functions (which are called properties and methods when they are inside objects).
+	**[⬆ Back to Top](#table-of-contents)**
+
+27. ### What is an Object Prototype
+
+	Prototypes are the mechanism by which JavaScript objects inherit features from one another. JavaScript prototypes are used to access the properties and methods of objects. Inherited properties are originally defined in the prototype or parent object.Prototypes are a powerful and very flexible feature of JavaScript, making it possible to reuse code and combine objects.
+	**[⬆ Back to Top](#table-of-contents)**
+
+28. ### What is a Prototype Chain and Shadowing properties
+
+	Every object in JavaScript has a built-in property, which is called its prototype. The prototype is itself an object, so the prototype will have its own prototype, making what's called a prototype chain. The chain ends when we reach a prototype that has null for its own prototype.
+
+	![Screenshot](images/prototype_chain.png)
+	Note: The property of an object that points to its prototype is not called prototype. Its name is not standard, but in practice all browsers use __proto__. The standard way to access an object's prototype is the Object.getPrototypeOf() method.
+	```Javascript
+	const myDate = new Date();
+	let object = myDate;
+
+	do {
+	object = Object.getPrototypeOf(object);
+	console.log(object);
+	} while (object);
+
+	// Date.prototype
+	// Object { }
+	// null
+	```
+	![Screenshot](images/mydate-prototype-chain.svg)
+
+		# Shadowing properties
+		What happens if you define a property in an object, when a property with the same name is defined in the object's prototype? Let's see:
+
+		```Javascript
+		const myDate = new Date(1995, 11, 17);
+
+		console.log(myDate.getTime()); // 819129600000
+
+		myDate.getTime = function () {
+		console.log("something else!");
+		};
+
+		myDate.getTime(); // 'something else!'
+		```
+		This should be predictable, given the description of the prototype chain. When we call getTime() the browser first looks in myDate for a property with that name, and only checks the prototype if myDate does not define it. So when we add getTime() to myDate, then the version in myDate is called.
+
+		This is called "shadowing" the property.
+
+		# Setting a prototype
+		There are various ways of setting an object's prototype in JavaScript, and here we'll describe two: Object.create() and constructors.
+
+		Using Object.create
+		The Object.create() method creates a new object and allows you to specify an object that will be used as the new object's prototype.
+
+		Here's an example:
+
+		```JS
+		Copy to Clipboard
+		const personPrototype = {
+			greet() {
+				console.log("hello!");
+			},
+		};
+		
+		const carl = Object.create(personPrototype);
+		carl.greet(); // hello!
+		```
+		Here we create an object personPrototype, which has a greet() method. We then use Object.create() to create a new object with personPrototype as its prototype. Now we can call greet() on the new object, and the prototype provides its implementation.
+
+		Using a constructor
+		In JavaScript, all functions have a property named prototype. When you call a function as a constructor, this property is set as the prototype of the newly constructed object (by convention, in the property named __proto__).
+
+		So if we set the prototype of a constructor, we can ensure that all objects created with that constructor are given that prototype:
+
+		```JS
+		const personPrototype = {
+			greet() {
+				console.log(`hello, my name is ${this.name}!`);
+			},
+		};
+
+		function Person(name) {
+			this.name = name;
+		}
+
+		Object.assign(Person.prototype, personPrototype);
+		// or
+		// Person.prototype.greet = personPrototype.greet;
+		```
+		Here we create:
+
+		an object personPrototype, which has a greet() method
+		a Person() constructor function which initializes the name of the person to create.
+		We then put the methods defined in personPrototype onto the Person function's prototype property using Object.assign.
+
+		After this code, objects created using Person() will get Person.prototype as their prototype, which automatically contains the greet method.
+
+		```JS
+		const reuben = new Person("Reuben");
+		reuben.greet(); // hello, my name is Reuben!
+		```
+		This also explains why we said earlier that the prototype of myDate is called Date.prototype: it's the prototype property of the Date constructor.	
+
+  **[⬆ Back to Top](#table-of-contents)**
+
+29. ### What is a Promise
+
+	A Promise is a proxy for a value not necessarily known when the promise is created. It allows you to associate handlers with an asynchronous action's eventual success value or failure reason. This lets asynchronous methods return values like synchronous methods: instead of immediately returning the final value, the asynchronous method returns a promise to supply the value at some point in the future.
+
+	```Javascript
+	let promise = new Promise(function(resolve, reject) {
+		// executor (the producing code, "singer")
+	});
+	```
+	The function passed to new Promise is called the executor. When new Promise is created, the executor runs automatically. It contains the producing code which should eventually produce the result. In terms of the analogy above: the executor is the “singer”.
+
+	
+	
+	
+	
+	
 	### Nodejs topics
