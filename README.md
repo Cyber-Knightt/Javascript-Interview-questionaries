@@ -34,6 +34,7 @@
 | 27 | [What is an Object Prototype](#what-is-an-object-prototype) |
 | 28 | [What is a Prototype Chain and Shadowing properties](#what-is-a-prototype-chain-and-Shadowing-properties) |
 | 29 | [What is a Promise](#what-is-a-promise) |
+| 30 | [What is an Array](#what-is-an-array) |
 
 | NodeJs | [Node Js Topics](#Nodejs-topics) |
 
@@ -896,7 +897,10 @@
 	```
 	The function passed to new Promise is called the executor. When new Promise is created, the executor runs automatically. It contains the producing code which should eventually produce the result. In terms of the analogy above: the executor is the “singer”.
 
+30. ### What is an Array
+
 	
+**[⬆ Back to Top](#table-of-contents)**
 	
 	
 	
