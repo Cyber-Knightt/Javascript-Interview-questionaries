@@ -890,11 +890,33 @@
 	A Promise is a proxy for a value not necessarily known when the promise is created. It allows you to associate handlers with an asynchronous action's eventual success value or failure reason. This lets asynchronous methods return values like synchronous methods: instead of immediately returning the final value, the asynchronous method returns a promise to supply the value at some point in the future.
 
 	```Javascript
-	let promise = new Promise(function(resolve, reject) {
-		// executor (the producing code, "singer")
+	const promise = new Promise((resolve, reject) => {
+		// contain an operation
+		// ...
+
+		// return the state
+		if (success) {
+			resolve(value);
+		} else {
+			reject(error);
+		}
 	});
 	```
 	The function passed to new Promise is called the executor. When new Promise is created, the executor runs automatically. It contains the producing code which should eventually produce the result. In terms of the analogy above: the executor is the “singer”.
+
+	[Check out Promise API](https://javascript.info/promise-api)
+
+30. ### JavaScript Generators
+
+	In JavaScript, a regular function is executed based on the run-to-completion model. It cannot pause midway and then continues from where it paused. A generator can pause midway and then continues from where it paused. For example:
+	```Javascript
+	function* generate() {
+		console.log('invoked 1st time');
+		yield 1;
+		console.log('invoked 2nd time');
+		yield 2;
+	}
+	```
 
 	
 	
