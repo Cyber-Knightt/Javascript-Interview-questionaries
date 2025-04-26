@@ -34,14 +34,17 @@
 | 27 | [What is an Object Prototype](#what-is-an-object-prototype) |
 | 28 | [What is a Prototype Chain and Shadowing properties](#what-is-a-prototype-chain-and-Shadowing-properties) |
 | 29 | [What is a Promise](#what-is-a-promise) |
+| 30 | [What is an Array](#what-is-an-array) |
 
-| NodeJs | [Node Js Topics](#Nodejs-topics) |
+| NodeJs | [Node Js Topics](#nodejs-topics) |
 
 | No. | Questions |
 | --- | --------- |
-| 1 | [What are the possible ways to create objects in JavaScript](#what-are-the-possible-ways-to-create-objects-in-javascript) |
-| 2 | [What is a prototype chain](#what-is-a-prototype-chain) |
-| 3 | [What is closures](#what-is-closures) |
+| 1 | [Understanding the Node.js Event Loop](#understanding-the-nodejs-event-loop) |
+| 2 | [Child Process Module in Node.js](#child-process-module-in-nodejs) |
+| 3 | [Worker Threads in Node.js](#worker-threads-in-nodejs) |
+| 3 | [Clusters](#clusters) |
+| 3 | [Worker Threads in Node.js](#worker-threads-in-nodejs) |
 <!-- TOC_END -->
 
 
@@ -917,10 +920,234 @@
 		yield 2;
 	}
 	```
+30. ### What is an Array
 
 	
+**[⬆ Back to Top](#table-of-contents)**
+
+---
+## Node Js Concepts
 	
-	
-	
-	
-	### Nodejs topics
+## 📘 Understanding the Node.js Event Loop
+1. ### Understanding the Node.js Event Loop
+
+
+## 🔧 What is Node.js?
+Node.js is an open-source, cross-platform JavaScript runtime environment that executes JavaScript code outside a web browser. Built on Chrome’s V8 engine, Node.js enables developers to build scalable and high-performance applications, particularly for networked applications like web servers and APIs.
+
+### Key Features:
+- **Single-threaded, event-driven architecture**: Efficiently handles multiple client requests using the event loop.
+- **Non-blocking I/O**: Performs asynchronous operations to prevent blocking the main thread.
+- **Built on libuv**: A library that provides a consistent API for asynchronous I/O across operating systems.
+
+---
+
+## 🔄 What is the Event Loop?
+The Event Loop is the core mechanism that enables Node.js to perform non-blocking I/O operations despite being single-threaded. It allows Node.js to handle multiple operations concurrently by offloading operations to the system kernel or a thread pool and queueing callbacks to be executed later.
+
+---
+
+## 🧩 Core Components of the Event Loop
+
+### 1. 📚 Call Stack
+- A data structure that records where in the program we are.
+- Functions are pushed when invoked and popped when returned.
+- Runs one function at a time.
+- Tasks are pushed when invoked and popped when complete.
+- Long-running tasks can block the stack.
+
+### 2. 📥 Callback Queue
+- Stores callback functions ready to be executed.
+- Event loop pushes them to the call stack when it’s empty.
+
+### 3. ⚡ Microtask Queue
+- High-priority queue for `process.nextTick()` and Promises.
+- Executed immediately after the current script and before any I/O tasks.
+
+### 4. ⚙️ libuv Thread Pool
+- Used for file system tasks, DNS lookups, and other asynchronous operations.
+- Maintains a thread pool (default size: 4).
+
+### 5. 🧵 Worker Threads
+- Enables parallel execution of JavaScript code for CPU-intensive tasks.
+- Operates independently from the main thread.
+
+### 6. 🔍 Async Hooks
+- API to monitor the lifecycle of asynchronous resources.
+- Useful for debugging and performance monitoring.
+
+### 7. ⏱️ Timers API
+- `setTimeout()`: Executes after delay.
+- `setInterval()`: Executes repeatedly after fixed delay.
+- `setImmediate()`: Executes after the current poll phase.
+
+---
+
+## 🌀 Phases of the Event Loop
+1. **Timers Phase** – Executes `setTimeout()` and `setInterval()` callbacks.
+2. **Pending Callbacks Phase** – Executes I/O callbacks deferred to the next loop iteration.
+3. **Idle, Prepare Phase** – Internal operations.
+4. **Poll Phase** – Retrieves new I/O events and executes I/O-related callbacks.
+5. **Check Phase** – Executes `setImmediate()` callbacks.
+6. **Close Callbacks Phase** – Executes close events like `socket.on('close', ...)`.
+
+### 🧵 Microtasks between phases:
+- `process.nextTick()`
+- Promise callbacks
+
+---
+
+## 🧠 How the Event Loop Works: Step-by-Step
+
+1. **Initialization** – Starts the event loop and processes the script.
+2. **Execution of Top-Level Code** – Synchronous code and setup for async operations.
+3. **Processing Phases** – The loop enters phases and executes callbacks.
+4. **Async Operations Handling** – Handled by kernel or thread pool; results queued.
+5. **Loop Continuation** – Repeats while there are events to process.
+
+---
+
+## 🖼️ Visualizing the Event Loop
+
+```sql
+┌───────────────┐
+│   Call Stack  │    ← Tasks go here first
+└───────────────┘
+       ↓
+┌───────────────┐
+│ Microtask Queue│  ← process.nextTick, Promises (handled first)
+└───────────────┘
+       ↓
+┌───────────────┐
+│ Callback Queue │  ← setTimeout, setInterval, setImmediate
+└───────────────┘
+       ↓
+┌───────────────┐
+│ Event Loop     │  ← Keeps checking: Is stack empty? Any microtasks? Any callbacks?
+└───────────────┘
+```
+
+Source: GeeksforGeeks - Node.js Event Loop
+
+---
+
+## 🏁 Example: Order of Execution
+```javascript
+setTimeout(() => console.log('setTimeout'), 0);
+setImmediate(() => console.log('setImmediate'));
+process.nextTick(() => console.log('nextTick'));
+Promise.resolve().then(() => console.log('Promise'));
+```
+**Expected Output:**
+```javascript
+nextTick
+Promise
+setTimeout
+setImmediate
+```
+### Explanation:
+- `process.nextTick()` and Promise callbacks are microtasks (executed first).
+- `setTimeout()` runs in the timers phase.
+- `setImmediate()` runs in the check phase.
+
+---
+
+## 🧩 Simple Breakdown: Node.js Event Loop Components
+
+### 1. 📚 Call Stack — “The To-Do List”
+- Runs one function at a time.
+- Tasks are pushed when invoked and popped when complete.
+- Long-running tasks can block the stack.
+
+### 2. 📥 Callback Queue — “The Waiting Line”
+- Stores delayed tasks (e.g. `setTimeout`).
+- Waits until call stack is clear.
+
+```javascript
+setTimeout(() => console.log("Hello!"), 1000);
+```
+
+### 3. ⚡ Microtask Queue — “The Fast Lane”
+- Handles `process.nextTick()` and Promises.
+- Always processed before the callback queue.
+
+### 4. 🔁 Event Loop — “The Coordinator”
+- Checks if the call stack is clear.
+- Runs microtasks first, then callbacks.
+- Operates in continuous cycles (ticks).
+
+### 5. ⚙️ Thread Pool — “Helpers in the Background”
+- Handles heavy async tasks (file I/O, image resizing, etc.).
+- Notifies when done, and callbacks go into callback queue.
+
+### 6. 🧵 Worker Threads — “Backup Brains for Big Tasks”
+- Run JS code in parallel threads.
+- Useful for CPU-heavy operations.
+
+### 7. 🔍 Async Hooks — “Behind-the-Scenes Monitor”
+- Track async operation lifecycle.
+- Good for debugging and error tracing.
+
+### 8. ⏱️ Timers API — “Scheduled Tasks”
+```javascript
+setTimeout(() => console.log("Waited 1 sec"), 1000);
+setImmediate(() => console.log("I run immediately after poll phase"));
+```
+
+---
+
+## 📚 References & Further Reading
+- [GeeksforGeeks: Node.js Event Loop](https://www.geeksforgeeks.org/node-js-event-loop/)
+- [DEV Community: Node.js Event Loop](https://dev.to/endeavourmonk/nodejs-event-loop-46oo)
+- [LogRocket: Node.js Event Loop Guide](https://blog.logrocket.com/complete-guide-node-js-event-loop/)
+
+---
+2. ### Child Process Module in Node.js
+
+## 🔧What is the child process module?
+The child process is a core module that allows users to create and control subprocesses. These processes can execute system commands, run scripts in various languages, or even fork new instances of Node.js.
+
+The primary purpose of the child process module is to allow the execution of multiple processes simultaneously without blocking the main event loop.
+
+Using a child process is important for applications that need to handle CPU-intensive operations or execute external commands and scripts. With it, your applications can maintain high performance and responsiveness.
+
+## Use cases for child processes
+
+The child processes can be used for tasks including the following:
+
+- **Parallel processing**: Child processing enables parallel processing by allowing your applications to distribute workloads across multiple CPU cores, considerably improving performance for CPU-intensive activities such as image processing and data analysis.
+
+- **Running shell scripts**: Child processes can be used to execute shell scripts. You can use the exec technique to run shell commands and capture their output, and also the spawn method which offers greater control when directly running scripts.
+
+- **Communication with other services**: The child processes play a vital role when it comes to communication. It communicates with external services such as databases, APIs, or microservices. They can be used to make calls to external APIs, do database queries, and communicate with other microservices.
+
+## Creating a child process
+To create a child process, Node.js provides us with four primary methods for creating a child process which are the exec(),execFile(),spawn(),fork()
+
+---
+
+## 📚 References & Further Reading
+- [Dev: Node.js child process](https://dev.to/oyedeletemitope/understanding-the-child-process-module-in-nodejs-11lp)
+- [geeksforgeeks: Node.js child process](https://www.geeksforgeeks.org/node-js-child-process/)
+
+---
+
+3. ### Worker Threads in Node.js
+
+## 📚 References & Further Reading
+- [Last9: Node.js worker thread](https://last9.io/blog/understanding-worker-threads-in-node-js/)
+- [betterstack: Node.js worker thread](https://betterstack.com/community/guides/scaling-nodejs/nodejs-workers-explained/)
+- [logrocket: Node.js worker thread](https://blog.logrocket.com/complete-guide-threads-node-js/#implementing-worker-pool)
+- [medium: Node.js worker thread](https://medium.com/@manikmudholkar831995/worker-threads-multitasking-in-nodejs-6028cdf35e9d)
+
+---
+
+## 📘 15. Node.js Cluster
+
+## 📚 References & Further Reading
+- [medium: Clustering in Node.js](https://medium.com/@vloban/clustering-in-node-js-4e0bf17b7f0b)
+- [kinsta: Node.js clustering](https://kinsta.com/blog/node-js-clustering/)
+- [logrocket: Node.js worker thread](https://blog.logrocket.com/complete-guide-threads-node-js/#implementing-worker-pool)
+- [medium: Node.js worker thread](https://medium.com/@manikmudholkar831995/worker-threads-multitasking-in-nodejs-6028cdf35e9d)
+
+---
