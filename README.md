@@ -43,8 +43,8 @@
 | 1 | [Understanding the Node.js Event Loop](#understanding-the-nodejs-event-loop) |
 | 2 | [Child Process Module in Node.js](#child-process-module-in-nodejs) |
 | 3 | [Worker Threads in Node.js](#worker-threads-in-nodejs) |
-| 3 | [Clusters](#clusters) |
-| 3 | [Worker Threads in Node.js](#worker-threads-in-nodejs) |
+| 4 | [Clusters](#clusters) |
+| 5 | [Worker Threads in Node.js](#worker-threads-in-nodejs) |
 <!-- TOC_END -->
 
 
@@ -1160,3 +1160,238 @@ Some of the differences between fork and spawn include:
 - [medium: Node.js worker thread](https://medium.com/@manikmudholkar831995/worker-threads-multitasking-in-nodejs-6028cdf35e9d)
 
 ---
+
+# Node.js Interview Preparation
+
+This README provides a comprehensive topic-wise guide for mastering Node.js concepts, especially useful for interview preparation. Each topic includes explanations, code examples, and best resources.
+
+---
+
+## 📚 1. Introduction to Node.js
+- **What is Node.js**: Runtime built on Chrome's V8 engine.
+- **Why use Node.js**: Non-blocking, event-driven architecture.
+- **Use Cases**: APIs, real-time apps (chat, games), microservices.
+- **Example**:
+  ```js
+  console.log('Hello from Node.js!');
+  ```
+- **Resource**: [Node.js Official Docs](https://nodejs.org/en/docs/)
+
+---
+
+## 🧵 2. Node.js Architecture
+- **Event Loop & Call Stack**
+- **Libuv**: Manages I/O operations.
+- **Thread Pool vs Event Loop**
+- **Example**:
+  ```js
+  setTimeout(() => console.log("Timer done"), 0);
+  console.log("Code end");
+  ```
+- **Resource**: [Node.js Architecture Explained - RisingStack](https://blog.risingstack.com/node-js-event-loop-tutorial/)
+
+---
+
+## 📦 3. Modules and require()
+- **CommonJS vs ES Modules**
+- **Built-in Modules**: fs, path, http, os
+- **Creating Custom Modules**
+- **Example**:
+  ```js
+  // math.js
+  module.exports.add = (a, b) => a + b;
+
+  // app.js
+  const math = require('./math');
+  console.log(math.add(2, 3));
+  ```
+- **Resource**: [Node.js Modules Guide](https://nodejs.dev/en/learn)
+
+---
+
+## 🌐 4. Creating Web Server
+- **http module**
+- **Handling routes manually**
+- **Basic Routing Example**:
+  ```js
+  const http = require('http');
+  const server = http.createServer((req, res) => {
+    if (req.url === '/') res.end('Home');
+    else if (req.url === '/about') res.end('About');
+    else res.end('404 Not Found');
+  });
+  server.listen(3000);
+  ```
+- **Resource**: [Net Ninja Node.js Playlist](https://www.youtube.com/playlist?list=PL4cUxeGkcC9jLYyp2Aoh6hcWuxFDX6PBJ)
+
+---
+
+## 🛠️ 5. Express.js Framework
+- **Setup and Routing**
+- **Middleware**: Custom & Built-in
+- **Error Handling**
+- **Example**:
+  ```js
+  const express = require('express');
+  const app = express();
+
+  app.get('/', (req, res) => res.send('Hello Express'));
+
+  app.use((req, res) => res.status(404).send('Not Found'));
+
+  app.listen(3000);
+  ```
+- **Resource**: [Express.js Docs](https://expressjs.com/)
+
+---
+
+## 💾 6. File System (fs module)
+- **Read/Write/Append/Delete Files**
+- **Sync vs Async**
+- **Streams and Buffers**
+- **Example**:
+  ```js
+  const fs = require('fs');
+  fs.writeFile('test.txt', 'Hello FS!', err => {
+    if (err) throw err;
+    console.log('File written');
+  });
+  ```
+- **Resource**: [FS Module Docs](https://nodejs.org/api/fs.html)
+
+---
+
+## 🧪 7. Testing in Node.js
+- **Jest/Mocha/Chai**
+- **Unit vs Integration Testing**
+- **Example with Jest**:
+  ```js
+  test('adds 1 + 2 to equal 3', () => {
+    expect(1 + 2).toBe(3);
+  });
+  ```
+- **Resource**: [Jest Docs](https://jestjs.io/), [Mocha](https://mochajs.org/)
+
+---
+
+## 🌐 8. Asynchronous Programming
+- **Callbacks, Promises, async/await**
+- **Error Handling**
+- **Example**:
+  ```js
+  const fetchData = async () => {
+    try {
+      const res = await fetch('https://api.example.com');
+      const data = await res.json();
+      console.log(data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  fetchData();
+  ```
+- **Resource**: [Async JS YouTube Tutorial by Web Dev Simplified](https://www.youtube.com/watch?v=PoRJizFvM7s)
+
+---
+
+## 🔒 9. Security and Environment Variables
+- **dotenv package**
+- **Helmet, CORS**
+- **Sanitization Techniques**
+- **Example**:
+  ```js
+  require('dotenv').config();
+  console.log(process.env.API_KEY);
+  ```
+- **Resource**: [OWASP Node.js Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html)
+
+---
+
+## 🔌 10. Connecting to Databases
+- **MongoDB (Mongoose)**
+- **PostgreSQL (pg)**
+- **Example (MongoDB)**:
+  ```js
+  const mongoose = require('mongoose');
+  mongoose.connect('mongodb://localhost/test');
+  ```
+- **Resource**: [MongoDB Docs](https://www.mongodb.com/docs/), [Mongoose Docs](https://mongoosejs.com/)
+
+---
+
+## 📦 11. Package Management
+- **npm vs yarn**
+- **package.json, package-lock.json**
+- **Installing, Removing, Updating Packages**
+- **Resource**: [npm Docs](https://docs.npmjs.com/)
+
+---
+
+## 📈 12. Performance & Debugging
+- **Node.js Inspector**
+- **Memory Leaks, Heap Dumps**
+- **Benchmarking Tools**
+- **Resource**: [Debugging Node.js Guide](https://nodejs.org/en/docs/guides/debugging-getting-started/)
+
+---
+
+### What is middleware in Express.js? Provide an example.
+
+Middleware in Node.js refers to a concept where functions can be used to process incoming requests before they reach their final destination and handle outgoing responses before they are sent back to the client. These functions sit in between the initial request and the final response, hence the term “middleware.”
+
+Middleware functions in Express.js are functions that have access to the request object (req), the response object (res), and the next middleware function in the application's request-response cycle. Middleware can perform tasks such as executing code, modifying the request and response objects, ending the request-response cycle, and calling the next middleware function. For example:
+```JS
+    const express = require('express');
+    const app = express();
+
+    app.use((req, res, next) => {
+      console.log('Request URL:', req.originalUrl);
+      next();
+    });
+
+    app.get('/', (req, res) => {
+      res.send('Hello World!');
+    });
+
+    app.listen(3000, () => {
+      console.log('Server is running on port 3000');
+    });
+```
+- **Middleware Chaining**: Middleware chaining in Express.js refers to the process of executing multiple middleware functions in sequence. Each middleware function performs specific tasks such as logging requests, handling authentication, or parsing request bodies. Middleware functions must call the next() function to pass control to the next middleware function in the chain. This approach allows for modular and maintainable code.
+
+### File Upload In Node Js
+
+File uploads in Express applications are managed using the multer middleware. It processes multipart/form-data, which is used for file uploads. For example:
+```JS
+	const multer = require('multer');
+	const upload = multer({ dest: 'uploads/' });
+
+	app.post('/upload', upload.single('file'), (req, res) => {
+	res.send('File uploaded successfully!');
+	});
+```
+---
+
+### PM2 in a Node.js application.
+
+Process management tools like PM2 are essential for maintaining Node.js applications in production. PM2 ensures continuous operation by automatically restarting applications if they crash, minimizing downtime. It provides features for starting, stopping, and monitoring processes, as well as real-time performance tracking.
+
+PM2 enhances scalability through load balancing and cluster mode, running multiple instances of an application to distribute traffic and fully utilize system resources. It also simplifies log management and can generate startup scripts to ensure applications start on system boot, making it a comprehensive tool for managing Node.js applications in production.
+
+---
+
+## 🎯 Bonus Topics
+- **Event Emitters**
+- **Worker Threads**
+- **Child Processes**
+- **Cluster Module**
+- **WebSockets**
+
+---
+
+This README serves as a roadmap. Practice regularly and build small projects to reinforce concepts.
+
+---
+
+_Updated: April 2025_
+
