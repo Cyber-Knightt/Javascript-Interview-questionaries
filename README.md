@@ -41,7 +41,7 @@
 | No. | Questions |
 | --- | --------- |
 | 1 | [Understanding the Node.js Event Loop](#understanding-the-nodejs-event-loop) |
-| 2 | [Child Process Module in Node.js](#child-process-module-in-nodejs) |
+| 2 | [Child Process Module in Node.js](#2-child-process-module-in-nodejs) |
 | 3 | [Worker Threads in Node.js](#worker-threads-in-nodejs) |
 | 4 | [Clusters](#clusters) |
 | 5 | [Worker Threads in Node.js](#worker-threads-in-nodejs) |
