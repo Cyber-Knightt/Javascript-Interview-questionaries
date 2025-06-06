@@ -1106,9 +1106,7 @@ setImmediate(() => console.log("I run immediately after poll phase"));
 
 ### 🔧What is the child process module?
 The child process is a core module that allows users to create and control subprocesses. These processes can execute system commands, run scripts in various languages, or even fork new instances of Node.js.
-
 The primary purpose of the child process module is to allow the execution of multiple processes simultaneously without blocking the main event loop.
-
 Using a child process is important for applications that need to handle CPU-intensive operations or execute external commands and scripts. With it, your applications can maintain high performance and responsiveness.
 
 ### Use cases for child processes
@@ -1133,6 +1131,34 @@ Some of the differences between fork and spawn include:
 
 - **Use case specificity**: The fork() technique is specifically intended for situations in which you need to generate worker processes that are part of the same application but operate concurrently. In contrast, spawn() is more general-purpose and is used when you need to launch arbitrary commands or scripts outside of the Node.js ecosystem.
 
+#### How to Use Worker Threads in Node.js
+Using worker threads in Node.js is straightforward. Here's a basic example:
+```JS
+const { Worker, isMainThread, parentPort } = require('worker_threads');
+
+if (isMainThread) {
+  // Main thread: Create a worker thread
+  const worker = new Worker(__filename);
+
+  worker.on('message', (message) => {
+    console.log(`Received from worker: ${message}`);
+  });
+
+  worker.postMessage('Hello, worker!');
+} else {
+  // Worker thread: Receive message from main thread
+  parentPort.on('message', (message) => {
+    console.log(`Received from main thread: ${message}`);
+    parentPort.postMessage('Hello from worker!');
+  });
+}
+```
+**Explanation:**
+- **isMainThread:** This check helps distinguish between the main thread and the worker thread. If it is true, the current script is running in the main thread; otherwise, it’s running as a worker.
+- **Worker:** The Worker constructor is used to spawn a new worker thread. In this case, we’re spawning the current script (__filename) as the worker. The worker thread runs the same code but under a different execution context.
+- **parentPort:** The worker communicates back to the main thread using parentPort, which acts as a channel for sending and receiving messages.
+- **postMessage():** This method sends messages between the main thread and the worker thread. The main thread sends a message to the worker, and the worker sends a reply back.
+
 ---
 
 ### 📚 References & Further Reading
@@ -1142,6 +1168,30 @@ Some of the differences between fork and spawn include:
 ---
 
 ## 3. Worker Threads in Node.js
+
+Worker threads in Node.js allow you to run JavaScript code in parallel, utilizing multiple CPU cores to improve performance for CPU-intensive tasks. They operate independently of the main thread, preventing blocking and maintaining responsiveness.
+
+#### Why Do You Need Worker Threads ?
+Node.js's single-threaded event loop shines when it comes to handling asynchronous I/O tasks. However, it struggles with CPU-intensive operations, such as parsing large files or performing complex calculations.
+
+These tasks can block the event loop, causing slowdowns and delayed responses in your application.
+Worker threads solve this issue by running CPU-bound tasks in separate threads. This way, the main thread remains free to handle I/O operations without getting bogged down by long-running computations.
+
+#### How Do Worker Threads Work?
+Worker threads run in parallel to the main thread. You can create a new worker thread and assign it a task, such as processing data or performing a calculation. These threads communicate with the main thread via a messaging system.
+
+#### Key Features of Worker Threads
+- **Multithreading**
+Worker threads enable true multithreading in Node.js, allowing each thread to execute code independently. This is crucial for handling CPU-intensive tasks that would otherwise block the main event loop.
+
+- **Memory Isolation**
+Each worker thread has its own memory space, which reduces the risk of issues related to shared state. This makes it easier to manage parallel execution safely.
+
+- **Concurrency**
+Worker threads allow Node.js to handle multiple operations simultaneously, improving performance in CPU-bound tasks. This is particularly useful for applications that need to process large amounts of data or perform complex calculations.
+
+- **Communication**
+Worker threads communicate with the main thread through message-passing. Simple APIs like postMessage and onmessage facilitate this communication, enabling efficient data transfer between threads.
 
 ## 📚 References & Further Reading
 - [Last9: Node.js worker thread](https://last9.io/blog/understanding-worker-threads-in-node-js/)
