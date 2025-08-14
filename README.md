@@ -51,6 +51,9 @@
 <!-- QUESTIONS_START -->
 1. ### What are the possible ways to create objects in JavaScript
 
+	In JavaScript, an object is a collection of key-value pairs.
+	Keys are called properties (if the value is data) or methods (if the value is a function).
+
    There are many ways to create objects in javascript as mentioned below:
 
    1. **Object literal syntax:**
@@ -67,6 +70,8 @@
       Object literal property values can be of any data type, including array, function, and nested object.
 
       **Note:** This is one of the easiest ways to create an object.
+		- Easiest and most readable way.
+		- Useful for small, single-use objects.  
 
    2. **Object constructor:**
 
@@ -81,6 +86,8 @@
       ```javascript
       var object = Object();
       ```
+		- Rarely used directly (object literal {} is preferred).
+		- Works like Object.create(Object.prototype).
 
    3. **Object's create method:**
 
@@ -190,8 +197,10 @@
         this.name = "Sudheer";
       })();
       ```
+	
+	![Screenshot](images/Object_creation_methos.png)
 
-      **[⬆ Back to Top](#table-of-contents)**
+    **[⬆ Back to Top](#table-of-contents)**
 
 2. ### What is a prototype chain
 
@@ -220,6 +229,13 @@
 	console.log(subtract5(5)); // 0 is logged
 	```
 	In this example, we have developed a function subtractor(subtractingInteger) that takes a single parameter subtractingInteger and returns a new function. Its return function accepts only one input, a, and returns the difference of a and subtractingInteger. The function 'subtractor' is essentially a function factory. It creates functions that have the ability to subtract a specified value from their arguments. The function factory creates two new functions in the example above: one that subtracts 2 from its argument and one that subtracts 5 from its arguments. Both subtract2 and subtract5 are closures. They have the same function body definition, but they hold lexical surroundings that are distinct. subtractingInteger is 2 in subtract2's lexical environment, but subtractingInteger is 5 in subtract5's lexical environment.
+
+	#### Real-world use cases
+
+	- Data privacy (private variables)
+	- Function factories (customized functions)
+	- Event handlers remembering state
+	- Once-only execution patterns
 
 	**[⬆ Back to Top](#table-of-contents)**
 
