@@ -1177,34 +1177,6 @@ Some of the differences between fork and spawn include:
 
 - **Use case specificity**: The fork() technique is specifically intended for situations in which you need to generate worker processes that are part of the same application but operate concurrently. In contrast, spawn() is more general-purpose and is used when you need to launch arbitrary commands or scripts outside of the Node.js ecosystem.
 
-#### How to Use Worker Threads in Node.js
-Using worker threads in Node.js is straightforward. Here's a basic example:
-```JS
-const { Worker, isMainThread, parentPort } = require('worker_threads');
-
-if (isMainThread) {
-  // Main thread: Create a worker thread
-  const worker = new Worker(__filename);
-
-  worker.on('message', (message) => {
-    console.log(`Received from worker: ${message}`);
-  });
-
-  worker.postMessage('Hello, worker!');
-} else {
-  // Worker thread: Receive message from main thread
-  parentPort.on('message', (message) => {
-    console.log(`Received from main thread: ${message}`);
-    parentPort.postMessage('Hello from worker!');
-  });
-}
-```
-**Explanation:**
-- **isMainThread:** This check helps distinguish between the main thread and the worker thread. If it is true, the current script is running in the main thread; otherwise, it’s running as a worker.
-- **Worker:** The Worker constructor is used to spawn a new worker thread. In this case, we’re spawning the current script (__filename) as the worker. The worker thread runs the same code but under a different execution context.
-- **parentPort:** The worker communicates back to the main thread using parentPort, which acts as a channel for sending and receiving messages.
-- **postMessage():** This method sends messages between the main thread and the worker thread. The main thread sends a message to the worker, and the worker sends a reply back.
-
 ---
 
 ### 📚 References & Further Reading
@@ -1235,6 +1207,35 @@ Each worker thread has its own memory space, which reduces the risk of issues re
 
 - **Concurrency**
 Worker threads allow Node.js to handle multiple operations simultaneously, improving performance in CPU-bound tasks. This is particularly useful for applications that need to process large amounts of data or perform complex calculations.
+
+#### How to Use Worker Threads in Node.js
+Using worker threads in Node.js is straightforward. Here's a basic example:
+```JS
+const { Worker, isMainThread, parentPort } = require('worker_threads');
+
+if (isMainThread) {
+  // Main thread: Create a worker thread
+  const worker = new Worker(__filename);
+
+  worker.on('message', (message) => {
+    console.log(`Received from worker: ${message}`);
+  });
+
+  worker.postMessage('Hello, worker!');
+} else {
+  // Worker thread: Receive message from main thread
+  parentPort.on('message', (message) => {
+    console.log(`Received from main thread: ${message}`);
+    parentPort.postMessage('Hello from worker!');
+  });
+}
+```
+**Explanation:**
+- **isMainThread:** This check helps distinguish between the main thread and the worker thread. If it is true, the current script is running in the main thread; otherwise, it’s running as a worker.
+- **Worker:** The Worker constructor is used to spawn a new worker thread. In this case, we’re spawning the current script (__filename) as the worker. The worker thread runs the same code but under a different execution context.
+- **parentPort:** The worker communicates back to the main thread using parentPort, which acts as a channel for sending and receiving messages.
+- **postMessage():** This method sends messages between the main thread and the worker thread. The main thread sends a message to the worker, and the worker sends a reply back.
+
 
 - **Communication**
 Worker threads communicate with the main thread through message-passing. Simple APIs like postMessage and onmessage facilitate this communication, enabling efficient data transfer between threads.
