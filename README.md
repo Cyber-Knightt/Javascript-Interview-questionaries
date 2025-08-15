@@ -42,14 +42,17 @@
 | --- | --------- |
 | 1 | [Understanding the Node.js Event Loop](#understanding-the-nodejs-event-loop) |
 | 2 | [Child Process Module in Node.js](#2-child-process-module-in-nodejs) |
-| 3 | [Worker Threads in Node.js](#worker-threads-in-nodejs) |
-| 4 | [Clusters](#clusters) |
+| 3 | [Worker Threads in Node.js](#3-worker-threads-in-nodejs) |
+| 4 | [Node.js Cluster](#4-nodejs-cluster) |
 | 5 | [Worker Threads in Node.js](#worker-threads-in-nodejs) |
 <!-- TOC_END -->
 
 
 <!-- QUESTIONS_START -->
 1. ### What are the possible ways to create objects in JavaScript
+
+	In JavaScript, an object is a collection of key-value pairs.
+	Keys are called properties (if the value is data) or methods (if the value is a function).
 
    There are many ways to create objects in javascript as mentioned below:
 
@@ -67,6 +70,8 @@
       Object literal property values can be of any data type, including array, function, and nested object.
 
       **Note:** This is one of the easiest ways to create an object.
+		- Easiest and most readable way.
+		- Useful for small, single-use objects.  
 
    2. **Object constructor:**
 
@@ -81,6 +86,8 @@
       ```javascript
       var object = Object();
       ```
+		- Rarely used directly (object literal {} is preferred).
+		- Works like Object.create(Object.prototype).
 
    3. **Object's create method:**
 
@@ -190,8 +197,10 @@
         this.name = "Sudheer";
       })();
       ```
+	
+	![Screenshot](images/Object_creation_methos.png)
 
-      **[⬆ Back to Top](#table-of-contents)**
+    **[⬆ Back to Top](#table-of-contents)**
 
 2. ### What is a prototype chain
 
@@ -220,6 +229,13 @@
 	console.log(subtract5(5)); // 0 is logged
 	```
 	In this example, we have developed a function subtractor(subtractingInteger) that takes a single parameter subtractingInteger and returns a new function. Its return function accepts only one input, a, and returns the difference of a and subtractingInteger. The function 'subtractor' is essentially a function factory. It creates functions that have the ability to subtract a specified value from their arguments. The function factory creates two new functions in the example above: one that subtracts 2 from its argument and one that subtracts 5 from its arguments. Both subtract2 and subtract5 are closures. They have the same function body definition, but they hold lexical surroundings that are distinct. subtractingInteger is 2 in subtract2's lexical environment, but subtractingInteger is 5 in subtract5's lexical environment.
+
+	#### Real-world use cases
+
+	- Data privacy (private variables)
+	- Function factories (customized functions)
+	- Event handlers remembering state
+	- Once-only execution patterns
 
 	**[⬆ Back to Top](#table-of-contents)**
 
@@ -1095,6 +1111,35 @@ setImmediate(() => console.log("I run immediately after poll phase"));
 ```
 
 ---
+## Event Loop Starvation
+
+Event loop starvation occurs when synchronous, long-running operations block the event loop, preventing asynchronous tasks from executing in a timely manner. This can cause issues like slow response times, timeouts, and an unresponsive application.
+
+### **Causes of Event Loop Starvation**:
+- **Long-running synchronous operations**:
+Synchronous code, like loops or file operations, can block the main thread, preventing the event loop from handling other tasks. 
+- **Heavy computations**:
+Complex algorithms or large data processing tasks can occupy the main thread for extended periods, starving other tasks. 
+- **Blocking I/O operations**:
+Synchronous network requests or file I/O operations can block the event loop. 
+- **Inefficient DOM manipulation**:
+Extensive DOM manipulations, especially in large applications, can lead to delays in rendering and responsiveness. 
+- **Microtask overload**:
+Excessive microtasks (like those from Promise.then()) can consume the event loop and delay callback execution.
+
+### **Solutions to Avoid Event Loop Starvation**:
+- **Asynchronous operations**:
+Use asynchronous functions, callbacks, promises, and async/await to avoid blocking the main thread. 
+- **Offloading tasks**:
+Utilize Web Workers, threads, or separate processes for computationally intensive tasks. 
+- **Microtask management**:
+Be mindful of microtasks and chain them efficiently to avoid overwhelming the event loop. 
+- **Efficient code**:
+Optimize code for performance and minimize blocking operations. 
+- **Monitoring and debugging**:
+Use tools like node-inspector to identify and resolve bottlenecks in the event loop. 
+
+---
 
 ## 📚 References & Further Reading
 - [GeeksforGeeks: Node.js Event Loop](https://www.geeksforgeeks.org/node-js-event-loop/)
@@ -1102,7 +1147,7 @@ setImmediate(() => console.log("I run immediately after poll phase"));
 - [LogRocket: Node.js Event Loop Guide](https://blog.logrocket.com/complete-guide-node-js-event-loop/)
 
 ---
-## 2. Child Process Module in Node.js
+# 2.  Child Process Module in Node.js
 
 ### 🔧What is the child process module?
 The child process is a core module that allows users to create and control subprocesses. These processes can execute system commands, run scripts in various languages, or even fork new instances of Node.js.
@@ -1139,7 +1184,7 @@ Some of the differences between fork and spawn include:
 
 ---
 
-## 3. Worker Threads in Node.js
+# 3. Worker Threads in Node.js
 
 Worker threads in Node.js allow you to run JavaScript code in parallel, utilizing multiple CPU cores to improve performance for CPU-intensive tasks. They operate independently of the main thread, preventing blocking and maintaining responsiveness.
 
@@ -1202,7 +1247,7 @@ Worker threads communicate with the main thread through message-passing. Simple 
 
 ---
 
-## 📘 15. Node.js Cluster
+# 4. Node.js Cluster
 
 ## 📚 References & Further Reading
 - [medium: Clustering in Node.js](https://medium.com/@vloban/clustering-in-node-js-4e0bf17b7f0b)
@@ -1386,7 +1431,7 @@ This README provides a comprehensive topic-wise guide for mastering Node.js conc
 
 ---
 
-### What is middleware in Express.js? Provide an example.
+## What is middleware in Express.js? Provide an example.
 
 Middleware in Node.js refers to a concept where functions can be used to process incoming requests before they reach their final destination and handle outgoing responses before they are sent back to the client. These functions sit in between the initial request and the final response, hence the term “middleware.”
 
@@ -1410,6 +1455,7 @@ Middleware functions in Express.js are functions that have access to the request
 ```
 - **Middleware Chaining**: Middleware chaining in Express.js refers to the process of executing multiple middleware functions in sequence. Each middleware function performs specific tasks such as logging requests, handling authentication, or parsing request bodies. Middleware functions must call the next() function to pass control to the next middleware function in the chain. This approach allows for modular and maintainable code.
 
+---
 ### File Upload In Node Js
 
 File uploads in Express applications are managed using the multer middleware. It processes multipart/form-data, which is used for file uploads. For example:
@@ -1423,11 +1469,84 @@ File uploads in Express applications are managed using the multer middleware. It
 ```
 ---
 
-### PM2 in a Node.js application.
+## PM2 in a Node.js application.
 
 Process management tools like PM2 are essential for maintaining Node.js applications in production. PM2 ensures continuous operation by automatically restarting applications if they crash, minimizing downtime. It provides features for starting, stopping, and monitoring processes, as well as real-time performance tracking.
 
 PM2 enhances scalability through load balancing and cluster mode, running multiple instances of an application to distribute traffic and fully utilize system resources. It also simplifies log management and can generate startup scripts to ensure applications start on system boot, making it a comprehensive tool for managing Node.js applications in production.
+
+---
+
+# Streams and Buffers
+
+In Node.js, streams and buffers are fundamental concepts for handling data efficiently, particularly when dealing with large amounts of data or continuous data flow.
+
+## Buffers
+A buffer is a temporary storage area in memory used to hold binary data. It's like an array of integers representing bytes of data. Buffers are crucial when interacting with files, network sockets, or any operation that involves raw binary data.
+
+### How Buffers Work
+Buffers handle binary data efficiently. Think of them like a bucket that temporarily holds water until you’re ready to use it. Buffers store chunks of data from streams, allowing you to process that data later.
+
+Here’s an example of working with a buffer:
+```js
+// Creating a buffer
+const buffer = Buffer.from('Hello, Node.js!', 'utf-8');
+
+// Accessing data from a buffer
+console.log(buffer.toString('hex')); // Output: 48656c6c6f2c204e6f64652e6a7321
+console.log(buffer.toString('utf-8')); // Output: Hello, Node.js!
+```
+## Streams
+A stream is an abstract interface for working with streaming data, meaning data that is processed piece by piece. Streams allow you to handle data sequentially without needing to load the entire dataset into memory. This is particularly useful for large files or continuous data sources. 
+
+### There are four types of streams:
+
+- **Readable**: Streams from which data can be read (e.g., reading from a file).
+- **Writable**: Streams to which data can be written (e.g., writing to a file).
+- **Duplex**: Streams that are both readable and writable (e.g., network sockets).
+- **Transform**: Duplex streams that can modify or transform data as it is read or written (e.g., compression or encryption streams).
+
+### How Streams Work
+Let’s break down how streams work with a simple example.
+
+Imagine you’re downloading a video. Instead of waiting for the entire video to download before you can start watching, streaming allows you to start watching right away. Data is received in small chunks, and you can begin viewing as soon as you have enough data.
+
+In Node.js, this process is similar. When you read a file or receive data from an HTTP request, streams break the data into manageable chunks.
+```js
+const fs = require('fs');
+
+// Creating a readable stream
+const readableStream = fs.createReadStream('input.txt');
+
+// Creating a writable stream
+const writableStream = fs.createWriteStream('output.txt');
+
+// Piping data from readable stream to writable stream
+readableStream.pipe(writableStream);
+
+// Handling data events
+readableStream.on('data', (chunk) => {
+    console.log(`Received chunk: ${chunk.length} bytes`);
+});
+
+readableStream.on('end', () => {
+    console.log('Finished reading data');
+});
+
+readableStream.on('error', (err) => {
+  console.error(`Error reading data: ${err}`);
+});
+```
+### Key Events in Streams
+Streams are event-driven, which means they emit certain events when specific actions take place. Some key events you’ll work with include:
+
+- **data**: Emitted when a chunk of data is available.
+- **end**: Emitted when no more data is available.
+- **error**: Emitted when there’s an error with the stream.
+- **finish**: Emitted when all the data has been written (used for writable streams).
+
+### Buffering in Streams
+Streams use buffers internally to manage the flow of data. When data is read from a source, it's temporarily stored in a buffer before being processed or sent to its destination. The highWaterMark property of a stream determines the size of this buffer. Buffering ensures that data is handled efficiently and prevents data loss or backpressure issues.
 
 ---
 
