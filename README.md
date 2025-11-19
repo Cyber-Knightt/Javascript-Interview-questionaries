@@ -300,12 +300,17 @@
 
 6. ### What are TypeScript Interfaces
 
+	An interface in TypeScript is like a contract for an object’s shape.
+	It defines the structure (properties, types, and methods) an object must follow, but does not contain implementation details.
+
 	An interface in TypeScript defines the structure or skeleton of an object. It enforces a specific syntax on classes, specifying the types of data an object must have. Essentially, an interface acts as a contract that describes the shape of an object.
 
 	Interfaces are capable of describing the wide range of shapes that JavaScript objects can take. In addition to describing an object with properties, interfaces are also capable of describing function types. To describe a function type with an interface, we give the interface a call signature.
+
 	An interface is defined using the interface keyword:
+	
 	```javascript
-	interface InterfaceName{
+	interface InterfaceName {
 		PropertyName: Type;
 		methodName() => Type;
 	}
@@ -316,6 +321,32 @@
 	let newArray: ForList = ["Interface", "for", "Array"];
 	console.log(newArray); 
 	```
+
+	### ✅ 1. Extending Interfaces
+
+	You can build on top of other interfaces.
+	```js
+	interface Person {
+		name: string;
+	}
+
+	interface Employee extends Person {
+		employeeId: number;
+	}
+
+	const emp: Employee = {
+		name: "Alice",
+		employeeId: 101
+	};
+	```
+	### ✅ Key points:
+
+	- Interfaces only define structure (no actual code execution).
+	- Great for type safety.
+	- Can be used with objects, functions, and classes.
+	- Can extend other interfaces for reusability.
+	- Helps in type-checking objects
+
 	**[⬆ Back to Top](#table-of-contents)**
 
 7. ### Characteristics of javascript strict-mode
@@ -331,19 +362,30 @@
 
 	Lexical Scoping in JavaScript can be performed when the internal state of the JavaScript function object consists of the function’s code as well as references concerning the current scope chain.
 	The ability of the function to be able to access variables of the parent is called lexical scope. In other words, the inner child function is always lexically bound to its parent and can always access its variables.
+	
 	Lexical scope in this case is the scope where the target variables were created not called. You can call a variable in one place but declare it in another place, for example, the parent function.
 
-	Read More[Link](https://medium.com/@catherineisonline/what-is-lexical-scope-in-javascript-708b1d1487ea)
+	### 1. Scope Chain Visual
+
+	When JavaScript looks for a variable:
+
+	1. It first checks the local scope (inside the current function).
+	2. If not found, it moves one level up to the parent scope.
+	3. It continues until it reaches the global scope.
+
+	Read More  [Link](https://medium.com/@catherineisonline/what-is-lexical-scope-in-javascript-708b1d1487ea)
 
 	**[⬆ Back to Top](#table-of-contents)**
 
 9. ### What is function declaration vs function expression?
 
 	Functions are the main “building blocks” of the program. They allow the code to be called many times without repetition. The main purposes of functions: to avoid code duplication.
-	Parameter - A parameter is the variable listed inside the parentheses in the function declaration (it’s a declaration time term).
-	Argument - An argument is the value that is passed to the function when it is called (it’s a call time term).
 
-	Function Declaration - a function, declared as a separate statement, in the main code flow:
+	`Parameter` - A parameter is the variable listed inside the parentheses in the function declaration (it’s a declaration time term).
+
+	`Argument` - An argument is the value that is passed to the function when it is called (it’s a call time term).
+
+	`Function Declaration` - a function, declared as a separate statement, in the main code flow:
 
 	```javascript
 	function showMessage() {
@@ -361,7 +403,7 @@
 	In strict mode, when a Function Declaration is within a code block, it’s visible everywhere inside that block. But not outside of it.
 
 
-	Function expressions - As the function creation happens in the context of the assignment expression (to the right side of =), this is a Function Expression.
+	`Function expressions` - As the function creation happens in the context of the assignment expression (to the right side of =), this is a Function Expression.
 	```javascript
 	let sayHi = function() {
 		alert( "Hello" );
@@ -464,10 +506,27 @@
 11. ### What is an anonymous function?
 	An anonymous function is a function without a name. The following shows how to define an anonymous function:
 	```javascript
-	(function () {
-		//...
-	});
+	const greet = function() {
+		console.log("Hello!");
+	};
+
+	greet(); // Hello!
 	```
+
+	### ✅ Common Uses -
+	- As a Callback Function
+	- In Array Methods - Often used with map, filter,
+	  forEach, reduce.
+	- Immediately Invoked Function Expression (IIFE)
+	- Event Handlers
+
+	### ✅ Key Takeaways
+
+	- Anonymous functions are unnamed.
+	- They’re best for short, one-time use functions.
+	- Often used as callbacks, IIFEs, and event handlers.
+	- Can be made more concise using arrow functions.
+
 	**[⬆ Back to Top](#table-of-contents)**
 
 12. ### Immediately invoked function execution?
@@ -496,14 +555,21 @@
 		console.log(person.firstName + ' ' + person.lastName);
 	})(person);
 	```
+
+	### ✅ Common Uses of IIFE
+	- `Avoid Global Variable Pollution` - Variables stay inside the IIFE scope, avoiding global namespace pollution.
+	- `Initialization Code` - Used for configuration setup before app runs.
+	- `Private Variables & Methods` 
+
+
 	**[⬆ Back to Top](#table-of-contents)**
 
 13. ### JavaScript pass-by-value or pass-by-reference?	
 
-	Pass by Value
+	`Pass by Value`
 	JavaScript is primarily a “pass by value” language. But what does this mean?
 
-	Pass by value means when a variable is assigned to another variable, the value stored in the variable is copied into the new variable. They are independent of each other, each occupying its own memory space.
+	`Pass by value` means when a variable is assigned to another variable, the value stored in the variable is copied into the new variable. They are independent of each other, each occupying its own memory space.
 	```javascript
 	let a = 10;
 	let b = a;
@@ -514,8 +580,8 @@
 	console.log(b); // Outputs: 10
 	```
 
-	-> When a function is called, the value of the variable is directly passed as an argument. Therefore, any modifications made inside the function do not impact the original value.
-	-> The parameters passed as arguments generate their own copies. Consequently, any alterations made inside the function apply to the copied value, not the original value.
+	- When a function is called, the value of the variable is directly passed as an argument. Therefore, any modifications made inside the function do not impact the original value.
+	- The parameters passed as arguments generate their own copies. Consequently, any alterations made inside the function apply to the copied value, not the original value.
 	```javascript
 	function Passbyvalue(a, b) {
 		let tmp;
@@ -534,7 +600,7 @@
 	console.log(`After calling Pass by value Function -> a =${a} b = ${b}`);// Output a =1 b = 2
 	```
 
-	Pass by Reference
+	`Pass by Reference`
 	While JavaScript is primarily a “pass by value” language, it uses a concept called “pass by reference” when dealing with objects (including arrays and functions).
 
 	When an object is created in JavaScript, it is stored in a memory space, and the variable associated with it stores the memory address or reference where the object is stored.
@@ -577,18 +643,65 @@
 14. ### What is Literals?
 
 	Literals represent values in JavaScript. These are fixed values—not variables—that you literally provide in your script.
-	Read More[Literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types#literals)
+
+	```js
+	42           // Number literal
+	"Hello"      // String literal
+	true         // Boolean literal
+	```
+
+
+	#### Why Use Literals?
+
+	- They’re direct, readable, and fast to write.
+	- They make initializing values easier without using constructors like new Array() or new Object().
+
+	Read More [Literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types#literals)
 
 15. ### What is a first class function
 
     In Javascript, functions are first class objects. First-class functions means when functions in that language are treated like any other variable.
 
-    For example, in such a language, a function can be passed as an argument to other functions, can be returned by another function and can be assigned as a value to a variable. For example, in the below example, handler functions assigned to a listener
+	This means you can:
+
+	1. Assign a function to a variable
+	2. Pass a function as an argument to another function
+	3. Return a function from another function
+
+    For example, in the below example, handler functions assigned to a listener
 
     ```javascript
-    const handler = () => console.log("This is a click handler function");
-    document.addEventListener("click", handler);
+    // Assign to variable
+	const greet = function(name: string): string {
+		return `Hello, ${name}`;
+	};
+
+	// Store in array
+	const funcs = [greet];
+
+	// Pass as argument
+	function callFunction(fn: (n: string) => string) {
+		console.log(fn("CK"));
+	}
+
+	// Return from another function
+	function multiplier(x: number) {
+		return function(y: number) {
+			return x * y;
+		};
+	}
+
+	callFunction(greet); // Hello, CK
+	console.log(multiplier(5)(2)); // 10
     ```
+
+	Why Are They Useful?
+
+	- Callbacks (e.g., in setTimeout, forEach)
+	- Higher-Order Functions (functions that take/return other functions)
+	- Functional Programming
+	- Event handling
+	- Closures & currying
 
     **[⬆ Back to Top](#table-of-contents)**
 
@@ -598,7 +711,13 @@
 
     ```javascript
     const firstOrder = () => console.log("I am a first order function!");
+
+	function add(a: number, b: number): number {
+		return a + b; // just works on values
+	}
+	console.log(add(2, 3)); // 5
     ```
+	✅ add is first-order because it only works with primitive values and returns a primitive.
 
     **[⬆ Back to Top](#table-of-contents)**
 
@@ -608,10 +727,26 @@
     The syntactic structure of higher order function will be as follows,
 
     ```javascript
-    const firstOrderFunc = () =>
-      console.log("Hello, I am a First order function");
-    const higherOrder = (ReturnFirstOrderFunc) => ReturnFirstOrderFunc();
-    higherOrder(firstOrderFunc);
+    // Takes another function as an argument
+	function applyTwice(fn: (n) => number, x) {
+		return fn(fn(x));
+	}
+
+	function square(n) {
+		return n * n;
+	}
+
+	console.log(applyTwice(square, 2)); // square(square(2)) = 16
+
+	// Returns a function
+	function powerOf(exp) {
+		return function(base) {
+			return base ** exp;
+		};
+	}
+
+	const squareFn = powerOf(2);
+	console.log(squareFn(5)); // 25
     ```
     You can also call the function which you are passing to higher order function as callback function.
 
@@ -689,6 +824,13 @@
 
     Remember that Pure functions are important as they simplify unit testing without any side effects and no need for dependency injection. They also avoid tight coupling and make it harder to break your application by not having any side effects. These principles are coming together with the **Immutability** concept of ES6: giving preference to **const** over **let** usage.
 
+	### 🔑 Why Pure Functions are Important?
+
+	- Easier to test (no hidden dependencies).
+	- Easier to debug (no external effects).
+	- Easier to parallelize (safe to run in multiple threads).
+	- Basis of functional programming.
+
     **[⬆ Back to Top](#table-of-contents)**
 
 21. ### What is the Temporal Dead Zone
@@ -745,9 +887,9 @@
 	import { Observable } from "rxjs";
 
 	const observable = new Observable((observer) => {
-	setTimeout(() => {
-		observer.next("Message from a Observable!");
-	}, 3000);
+		setTimeout(() => {
+			observer.next("Message from a Observable!");
+		}, 3000);
 	});
 
 	observable.subscribe((value) => console.log(value));
@@ -803,11 +945,13 @@
 26.	### What is an Object
 
 	An object is a collection of related data and/or functionality. These usually consist of several variables and functions (which are called properties and methods when they are inside objects).
+
 	**[⬆ Back to Top](#table-of-contents)**
 
 27. ### What is an Object Prototype
 
 	Prototypes are the mechanism by which JavaScript objects inherit features from one another. JavaScript prototypes are used to access the properties and methods of objects. Inherited properties are originally defined in the prototype or parent object.Prototypes are a powerful and very flexible feature of JavaScript, making it possible to reuse code and combine objects.
+
 	**[⬆ Back to Top](#table-of-contents)**
 
 28. ### What is a Prototype Chain and Shadowing properties
@@ -831,80 +975,80 @@
 	```
 	![Screenshot](images/mydate-prototype-chain.svg)
 
-		# Shadowing properties
-		What happens if you define a property in an object, when a property with the same name is defined in the object's prototype? Let's see:
+	### Shadowing properties
+	What happens if you define a property in an object, when a property with the same name is defined in the object's prototype? Let's see:
 
-		```Javascript
-		const myDate = new Date(1995, 11, 17);
+	```Javascript
+	const myDate = new Date(1995, 11, 17);
 
-		console.log(myDate.getTime()); // 819129600000
+	console.log(myDate.getTime()); // 819129600000
 
-		myDate.getTime = function () {
+	myDate.getTime = function () {
 		console.log("something else!");
-		};
+	};
 
-		myDate.getTime(); // 'something else!'
-		```
-		This should be predictable, given the description of the prototype chain. When we call getTime() the browser first looks in myDate for a property with that name, and only checks the prototype if myDate does not define it. So when we add getTime() to myDate, then the version in myDate is called.
+	myDate.getTime(); // 'something else!'
+	```
+	This should be predictable, given the description of the prototype chain. When we call getTime() the browser first looks in myDate for a property with that name, and only checks the prototype if myDate does not define it. So when we add getTime() to myDate, then the version in myDate is called.
 
-		This is called "shadowing" the property.
+	This is called "shadowing" the property.
 
-		# Setting a prototype
-		There are various ways of setting an object's prototype in JavaScript, and here we'll describe two: Object.create() and constructors.
+	### Setting a prototype
+	There are various ways of setting an object's prototype in JavaScript, and here we'll describe two: Object.create() and constructors.
 
-		Using Object.create
-		The Object.create() method creates a new object and allows you to specify an object that will be used as the new object's prototype.
+	Using Object.create
+	The Object.create() method creates a new object and allows you to specify an object that will be used as the new object's prototype.
 
-		Here's an example:
+	Here's an example:
 
-		```JS
-		Copy to Clipboard
-		const personPrototype = {
-			greet() {
-				console.log("hello!");
-			},
-		};
-		
-		const carl = Object.create(personPrototype);
-		carl.greet(); // hello!
-		```
-		Here we create an object personPrototype, which has a greet() method. We then use Object.create() to create a new object with personPrototype as its prototype. Now we can call greet() on the new object, and the prototype provides its implementation.
+	```JS
+	Copy to Clipboard
+	const personPrototype = {
+		greet() {
+			console.log("hello!");
+		},
+	};
+	
+	const carl = Object.create(personPrototype);
+	carl.greet(); // hello!
+	```
+	Here we create an object personPrototype, which has a greet() method. We then use Object.create() to create a new object with personPrototype as its prototype. Now we can call greet() on the new object, and the prototype provides its implementation.
 
-		Using a constructor
-		In JavaScript, all functions have a property named prototype. When you call a function as a constructor, this property is set as the prototype of the newly constructed object (by convention, in the property named __proto__).
+	Using a constructor
+	In JavaScript, all functions have a property named prototype. When you call a function as a constructor, this property is set as the prototype of the newly constructed object (by convention, in the property named __proto__).
 
-		So if we set the prototype of a constructor, we can ensure that all objects created with that constructor are given that prototype:
+	So if we set the prototype of a constructor, we can ensure that all objects created with that constructor are given that prototype:
 
-		```JS
-		const personPrototype = {
-			greet() {
-				console.log(`hello, my name is ${this.name}!`);
-			},
-		};
+	```JS
+	const personPrototype = {
+		greet() {
+			console.log(`hello, my name is ${this.name}!`);
+		},
+	};
 
-		function Person(name) {
-			this.name = name;
-		}
+	function Person(name) {
+		this.name = name;
+	}
 
-		Object.assign(Person.prototype, personPrototype);
-		// or
-		// Person.prototype.greet = personPrototype.greet;
-		```
-		Here we create:
+	Object.assign(Person.prototype, personPrototype);
+	// or
+	// Person.prototype.greet = personPrototype.greet;
+	```
+	Here we create:
 
-		an object personPrototype, which has a greet() method
-		a Person() constructor function which initializes the name of the person to create.
-		We then put the methods defined in personPrototype onto the Person function's prototype property using Object.assign.
+	an object personPrototype, which has a greet() method
+	a Person() constructor function which initializes the name of the person to create.
+	We then put the methods defined in personPrototype onto the Person function's prototype property using Object.assign.
 
-		After this code, objects created using Person() will get Person.prototype as their prototype, which automatically contains the greet method.
+	After this code, objects created using Person() will get Person.prototype as their prototype, which automatically contains the greet method.
 
-		```JS
-		const reuben = new Person("Reuben");
-		reuben.greet(); // hello, my name is Reuben!
-		```
-		This also explains why we said earlier that the prototype of myDate is called Date.prototype: it's the prototype property of the Date constructor.	
+	```JS
+	const reuben = new Person("Reuben");
+	reuben.greet(); // hello, my name is Reuben!
+	```
+	This also explains why we said earlier that the prototype of myDate is called Date.prototype: it's the prototype property of the Date constructor.	
 
-  **[⬆ Back to Top](#table-of-contents)**
+  	**[⬆ Back to Top](#table-of-contents)**
 
 29. ### What is a Promise
 
@@ -937,7 +1081,97 @@
 		yield 2;
 	}
 	```
-30. ### What is an Array
+30. ### Debouncing and Throttling.
+
+	#### 1. What’s Debouncing?
+
+	Debouncing ensures a function runs only after a certain time has passed without being called again.
+
+	Useful for:
+
+	- Search boxes (wait until the user stops typing before making an API call)
+	- Resize events
+	- Scroll events
+
+	Debounce Implementation (First-Class + Closure)
+
+	```js
+	function debounce(func, delay) {
+		let timeoutId; // closure variable
+
+		return function(...args) {
+			clearTimeout(timeoutId);
+			timeoutId = setTimeout(() => {
+				func.apply(this, args);
+			}, delay);
+		};
+	}
+
+	// Example usage:
+	function searchQuery(query) {
+		console.log(`Searching for: ${query}`);
+	}
+
+	const debouncedSearch = debounce(searchQuery, 500);
+
+	// Simulating typing
+	debouncedSearch("Hel");
+	debouncedSearch("Hello");
+	debouncedSearch("Hello W");
+	debouncedSearch("Hello World"); 
+	// Only "Hello World" will log after 500ms pause
+	```
+
+	### How this works:
+
+	- debounce returns a new function (closure keeps timeoutId alive)
+	- Every time the returned function runs, it resets the timer
+	- Only runs after the user stops calling it for the given delay
+
+	### 2. What’s Throttling?
+
+	Throttling ensures a function runs at most once in a given interval, no matter how many times it’s triggered.
+	
+	Useful for:
+
+	- Infinite scroll
+	- Button click rate-limiting
+	- Window resize handling
+
+	Throttle Implementation
+	```js
+	function throttle(func, limit) {
+		let inThrottle = false; // closure variable
+
+		return function(...args) {
+			if (!inThrottle) {
+				func.apply(this, args);
+				inThrottle = true;
+				setTimeout(() => inThrottle = false, limit);
+			}
+		};
+	}
+
+	// Example usage:
+	function logScroll() {
+		console.log(`Scroll event at ${new Date().toLocaleTimeString()}`);
+	}
+
+	const throttledScroll = throttle(logScroll, 1000);
+
+	window.addEventListener("scroll", throttledScroll);
+	```
+
+	How this works:
+
+	- throttle returns a new function that remembers inThrottle
+	- Runs immediately the first time, then blocks further calls until limit ms passes
+	
+	Why This Works with First-Class Functions + Closures
+
+	- `First-Class` → We pass func as an argument and return a new function
+	- `Closure` → Internal variables (timeoutId, inThrottle) stay alive across calls without polluting global scope
+	- This combination is the backbone of many performance optimizations in JS
 
 	
 **[⬆ Back to Top](#table-of-contents)**
@@ -1189,16 +1423,16 @@ Some of the differences between fork and spawn include:
 
 Worker threads in Node.js allow you to run JavaScript code in parallel, utilizing multiple CPU cores to improve performance for CPU-intensive tasks. They operate independently of the main thread, preventing blocking and maintaining responsiveness.
 
-#### Why Do You Need Worker Threads ?
+### Why Do You Need Worker Threads ?
 Node.js's single-threaded event loop shines when it comes to handling asynchronous I/O tasks. However, it struggles with CPU-intensive operations, such as parsing large files or performing complex calculations.
 
 These tasks can block the event loop, causing slowdowns and delayed responses in your application.
 Worker threads solve this issue by running CPU-bound tasks in separate threads. This way, the main thread remains free to handle I/O operations without getting bogged down by long-running computations.
 
-#### How Do Worker Threads Work?
+### How Do Worker Threads Work?
 Worker threads run in parallel to the main thread. You can create a new worker thread and assign it a task, such as processing data or performing a calculation. These threads communicate with the main thread via a messaging system.
 
-#### Key Features of Worker Threads
+### Key Features of Worker Threads
 - **Multithreading**
 Worker threads enable true multithreading in Node.js, allowing each thread to execute code independently. This is crucial for handling CPU-intensive tasks that would otherwise block the main event loop.
 
@@ -1208,7 +1442,7 @@ Each worker thread has its own memory space, which reduces the risk of issues re
 - **Concurrency**
 Worker threads allow Node.js to handle multiple operations simultaneously, improving performance in CPU-bound tasks. This is particularly useful for applications that need to process large amounts of data or perform complex calculations.
 
-#### How to Use Worker Threads in Node.js
+### How to Use Worker Threads in Node.js
 Using worker threads in Node.js is straightforward. Here's a basic example:
 ```JS
 const { Worker, isMainThread, parentPort } = require('worker_threads');
