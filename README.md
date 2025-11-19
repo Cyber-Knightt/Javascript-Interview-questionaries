@@ -45,6 +45,7 @@
 | 3 | [Worker Threads in Node.js](#3-worker-threads-in-nodejs) |
 | 4 | [Node.js Cluster](#4-nodejs-cluster) |
 | 5 | [Worker Threads in Node.js](#worker-threads-in-nodejs) |
+| 6 | [Scaling Node.js application](#6-scaling-nodejs-application) |
 <!-- TOC_END -->
 
 
@@ -1254,6 +1255,20 @@ Worker threads communicate with the main thread through message-passing. Simple 
 - [kinsta: Node.js clustering](https://kinsta.com/blog/node-js-clustering/)
 - [logrocket: Node.js worker thread](https://blog.logrocket.com/complete-guide-threads-node-js/#implementing-worker-pool)
 - [medium: Node.js worker thread](https://medium.com/@manikmudholkar831995/worker-threads-multitasking-in-nodejs-6028cdf35e9d)
+
+---
+
+# 6. Scaling Nodejs Application
+
+## What is Scalability?
+Scalability is the ability of an application to handle increasing traffic and growing demand while maintaining optimal performance. There are two primary types of scaling:
+
+**Vertical Scaling:** Increasing the resources (e.g., CPU, memory) of a single server to handle more requests.
+**Horizontal Scaling:** Adding more servers or instances to handle an increasing number of requests.
+
+While vertical scaling is straightforward, it has limitations as no matter how powerful the server is, there is always a limit. Horizontal scaling is more flexible and preferred for large-scale applications, enabling you to distribute the load across multiple servers.
+
+- **Resource**: [Node.js Scaling](https://dev.to/imsushant12/scaling-nodejs-applications-techniques-and-best-practices-3lc0)
 
 ---
 
